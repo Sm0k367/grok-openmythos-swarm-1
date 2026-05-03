@@ -58,7 +58,7 @@
             bottom: 30px;
             right: 30px;
             width: 420px;
-            height: 580px;
+            height: 620px;
             background: #18181b;
             border: 2px solid #a855f7;
             border-radius: 20px;
@@ -313,7 +313,6 @@
     </div>
 
     <script>
-        // Tailwind script
         tailwind.config = { content: [], theme: { extend: {} } };
 
         let rho = 0.847;
@@ -337,14 +336,14 @@
         }
 
         function runAgent(name) {
-            addMessage(`[${name.toUpperCase()}]`, "swarm-message", "Executing recurrent reasoning loop...");
+            addMessage(`[${name.toUpperCase()}]`, "swarm-message", "Activating recurrent reasoning loop...");
             setTimeout(() => {
-                addMessage("Swarm", "swarm-message", `${name} contributed to the collective reasoning. Latent depth stabilized.`);
-            }, 900);
+                addMessage("Swarm", "swarm-message", `${name} contributed to the collective intelligence.`);
+            }, 700);
         }
 
         function launchSwarm() {
-            addMessage("System", "swarm-message", "Activating all 11 agents in parallel through recurrent depth...");
+            addMessage("System", "swarm-message", "Activating all 11 agents in parallel...");
             let i = 0;
             const interval = setInterval(() => {
                 if (i < agents.length) {
@@ -353,25 +352,23 @@
                 } else {
                     clearInterval(interval);
                     setTimeout(() => {
-                        addMessage("Integrator Lead", "swarm-message", "All agents have converged. The swarm is ready for your command.");
-                    }, 700);
+                        addMessage("Integrator Lead", "swarm-message", "All agents converged. The swarm is ready for your command.");
+                    }, 800);
                 }
-            }, 450);
+            }, 420);
         }
 
         function toggleChat() {
             const chat = document.getElementById("chat-window");
             chat.style.display = chat.style.display === "flex" ? "none" : "flex";
-            if (chat.style.display === "flex") {
-                document.getElementById("chat-input").focus();
-            }
+            if (chat.style.display === "flex") document.getElementById("chat-input").focus();
         }
 
         function addMessage(sender, type, text) {
             const container = document.getElementById("chat-messages");
             const div = document.createElement("div");
             div.className = `message ${type}`;
-            div.innerHTML = `<strong class="text-purple-400">${sender}:</strong><br>${text}`;
+            div.innerHTML = `<strong>${sender}:</strong><br>${text}`;
             container.appendChild(div);
             container.scrollTop = container.scrollHeight;
         }
@@ -386,7 +383,7 @@
 
             const thinking = document.createElement("div");
             thinking.className = "message swarm-message";
-            thinking.innerHTML = `<strong class="text-purple-400">Swarm:</strong><br>Thinking through ${Math.floor(Math.random()*8+6)} latent loops with all 11 agents...`;
+            thinking.innerHTML = `<strong>Swarm:</strong><br>Thinking through latent loops with all 11 agents...`;
             document.getElementById("chat-messages").appendChild(thinking);
             document.getElementById("chat-messages").scrollTop = document.getElementById("chat-messages").scrollHeight;
 
@@ -418,20 +415,19 @@
                 addMessage("Swarm", "swarm-message", reply);
             } catch (err) {
                 thinking.remove();
-                addMessage("Swarm", "swarm-message", "Error connecting to Grok API. Please make sure your xAI API key is correctly set in Vercel environment variables as GROK_API_KEY.");
+                addMessage("Swarm", "swarm-message", "Error connecting to Grok API. Please make sure your xAI API key is correctly set in Vercel as GROK_API_KEY.");
             }
         }
 
         window.onload = () => {
             populateAgents();
             updateRho();
-            addMessage("Swarm", "swarm-message", "The Mythos Swarm is alive. All 11 agents are online. Ask me anything.");
-            console.log('%cTHE MYTHOS SWARM IS ALIVE - FULL CHAT ENABLED', 'color:#a855f7;font-size:13px');
+            addMessage("Swarm", "swarm-message", "The Mythos Swarm is alive. All 11 agents are online and listening. Ask me anything.");
         };
 
         window.setGrokKey = function(key) {
             window.GROK_API_KEY = key;
-            console.log("Grok API key set successfully.");
+            console.log("%cGrok API key activated. The swarm is now fully operational.", "color:#22d3ee");
         };
     </script>
 </body>
