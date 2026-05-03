@@ -352,7 +352,7 @@
                 } else {
                     clearInterval(interval);
                     setTimeout(() => {
-                        addMessage("Integrator Lead", "swarm-message", "All agents converged. The swarm is ready for your command.");
+                        addMessage("Integrator Lead", "swarm-message", "All agents have converged. The swarm is ready for your command.");
                     }, 800);
                 }
             }, 420);
@@ -387,12 +387,20 @@
             document.getElementById("chat-messages").appendChild(thinking);
             document.getElementById("chat-messages").scrollTop = document.getElementById("chat-messages").scrollHeight;
 
+            const apiKey = window.GROK_API_KEY || import.meta.env.VITE_GROK_API_KEY || '';
+
+            if (!apiKey) {
+                thinking.remove();
+                addMessage("Swarm", "swarm-message", "Grok API key not found. Please add VITE_GROK_API_KEY in Vercel environment variables.");
+                return;
+            }
+
             try {
                 const response = await fetch("https://api.x.ai/v1/chat/completions", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
-                        "Authorization": `Bearer ${window.GROK_API_KEY || ''}`
+                        "Authorization": `Bearer ${apiKey}`
                     },
                     body: JSON.stringify({
                         model: "grok-4",
@@ -415,14 +423,15 @@
                 addMessage("Swarm", "swarm-message", reply);
             } catch (err) {
                 thinking.remove();
-                addMessage("Swarm", "swarm-message", "Error connecting to Grok API. Please make sure your xAI API key is correctly set in Vercel as GROK_API_KEY.");
+                addMessage("Swarm", "swarm-message", "Error connecting to Grok API. Please check your xAI API key in Vercel environment variables (VITE_GROK_API_KEY).");
             }
         }
 
         window.onload = () => {
             populateAgents();
             updateRho();
-            addMessage("Swarm", "swarm-message", "The Mythos Swarm is alive. All 11 agents are online and listening. Ask me anything.");
+            addMessage("Swarm", "swarm-message", "The Mythos Swarm is alive. All 11 agents are online. Ask me anything.");
+            console.log('%cTHE MYTHOS SWARM IS ALIVE - FULL CHAT ENABLED', 'color:#a855f7;font-size:13px');
         };
 
         window.setGrokKey = function(key) {
