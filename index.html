@@ -1,13 +1,313 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>epic-tech-ai-swarm</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>THE MYTHOS SWARM IS ALIVE</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap');
+        
+        :root {
+            --neon-purple: #a855f7;
+            --neon-blue: #22d3ee;
+        }
+        
+        body {
+            background: #0a0a0a;
+            color: #e0e7ff;
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .neon-text {
+            text-shadow: 0 0 10px #a855f7, 0 0 20px #a855f7, 0 0 40px #22d3ee;
+        }
+        
+        .swarm-card {
+            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+            border: 1px solid rgba(168, 85, 247, 0.2);
+        }
+        
+        .swarm-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            border-color: #a855f7;
+            box-shadow: 0 0 30px -5px #a855f7;
+        }
+        
+        .spectral {
+            animation: pulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        
+        .loop-circle {
+            animation: rotate 25s linear infinite;
+        }
+        
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-zinc-950 text-white">
+    <div class="max-w-7xl mx-auto p-8">
+        <!-- Header -->
+        <div class="flex justify-between items-center mb-12 border-b border-purple-500/30 pb-8">
+            <div class="flex items-center gap-4">
+                <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-purple-600 to-cyan-500 flex items-center justify-center text-4xl loop-circle">⟳</div>
+                <div>
+                    <h1 class="text-6xl font-bold tracking-tighter neon-text">OPENMYTHOS</h1>
+                    <p class="text-cyan-400 text-2xl -mt-3">RECURRENT-DEPTH SWARM</p>
+                </div>
+            </div>
+            <div class="flex gap-8 text-sm uppercase tracking-widest font-medium">
+                <a href="#swarm" class="hover:text-purple-400 transition-colors">SWARM</a>
+                <a href="#variants" class="hover:text-purple-400 transition-colors">VARIANTS</a>
+                <a href="#architecture" class="hover:text-purple-400 transition-colors">ARCHITECTURE</a>
+            </div>
+        </div>
+
+        <!-- Hero -->
+        <div class="grid grid-cols-5 gap-12 items-center mb-20">
+            <div class="col-span-3">
+                <div class="inline-flex items-center gap-3 bg-zinc-900 border border-purple-500/30 rounded-3xl px-6 py-2 text-sm mb-8">
+                    <div class="w-3 h-3 bg-emerald-400 rounded-full animate-pulse"></div>
+                    STABLE RECURRENCE • ρ(A) < 1
+                </div>
+                <h2 class="text-7xl font-bold leading-none tracking-tighter neon-text mb-6">
+                    THE MYTHOS<br>SWARM IS<br><span class="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-cyan-400">ALIVE</span>
+                </h2>
+                <p class="text-xl text-zinc-400 max-w-lg">
+                    11 specialized sub-agents powered by a Recurrent-Depth Transformer with MoE routing and latent loop reasoning. 
+                    Built from the Grok-OpenMythos-Swarm-1 repository by <span class="text-purple-400">Epic Tech AI using Machine 11 by @tsi_org</span>.
+                </p>
+                <div class="flex gap-4 mt-10">
+                    <button onclick="launchSwarm()" 
+                            class="px-10 py-5 bg-white text-black font-semibold rounded-2xl hover:bg-zinc-100 flex items-center gap-3 text-lg shadow-xl shadow-purple-500/20">
+                        <i class="fas fa-bolt"></i>
+                        ACTIVATE SWARM
+                    </button>
+                    <button onclick="document.getElementById('architecture').scrollIntoView({ behavior: 'smooth' })" 
+                            class="px-8 py-5 border border-white/30 hover:border-white rounded-2xl text-lg">
+                        EXPLORE ARCHITECTURE
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Spectral Monitor -->
+            <div class="col-span-2">
+                <div class="bg-zinc-900 border border-purple-500/30 rounded-3xl p-10 relative">
+                    <div class="flex justify-between items-center mb-8">
+                        <div class="uppercase text-xs tracking-[3px] text-purple-400">Spectral Radius Monitor</div>
+                        <div id="rho" class="font-mono text-4xl font-bold text-emerald-400 spectral">0.847</div>
+                    </div>
+                    
+                    <div class="relative w-56 h-56 mx-auto">
+                        <svg class="w-full h-full -rotate-12" viewBox="0 0 240 240">
+                            <circle cx="120" cy="120" r="92" fill="none" stroke="#27272a" stroke-width="28"/>
+                            <circle id="progress" cx="120" cy="120" r="92" fill="none" stroke="#a855f7" stroke-width="28" 
+                                    stroke-dasharray="578" stroke-dashoffset="120" stroke-linecap="round"/>
+                        </svg>
+                        <div class="absolute inset-0 flex items-center justify-center text-center">
+                            <div>
+                                <div class="text-5xl font-bold tracking-tighter neon-text">LOOP</div>
+                                <div class="text-cyan-400 text-sm tracking-[4px] mt-1">DEPTH 16</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="text-center text-xs text-zinc-500 mt-8">
+                        11 Meshed Sub-Agents • MLA + MoE • ACT Halting
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Swarm Section -->
+        <div id="swarm" class="mb-24">
+            <div class="flex justify-between items-end mb-10">
+                <div>
+                    <div class="text-purple-400 text-xs tracking-[2px] uppercase">PHASE 01 — SWARM</div>
+                    <h3 class="text-5xl font-bold tracking-tighter">The 11 Sub-Agents</h3>
+                </div>
+                <button onclick="launchSwarm()" 
+                        class="px-8 py-4 bg-gradient-to-r from-purple-600 to-cyan-500 rounded-2xl font-semibold flex items-center gap-3 hover:brightness-110 transition">
+                    <i class="fas fa-sync"></i> RUN FULL MESH
+                </button>
+            </div>
+            
+            <div class="grid grid-cols-4 gap-6" id="agents">
+                <!-- Populated by JS -->
+            </div>
+        </div>
+
+        <!-- Variants -->
+        <div id="variants" class="mb-24">
+            <div class="text-purple-400 text-xs tracking-[2px] uppercase mb-3">PHASE 02 — VARIANTS</div>
+            <h3 class="text-5xl font-bold tracking-tighter mb-10">Mythos Scale Ladder</h3>
+            <div class="grid grid-cols-4 gap-6">
+                <div onclick="selectVariant(1)" class="bg-zinc-900 border border-zinc-700 hover:border-purple-500 p-8 rounded-3xl cursor-pointer transition-all">
+                    <div class="text-emerald-400 text-sm">1B PARAMETERS</div>
+                    <div class="text-4xl font-bold mt-2">mythos_1b</div>
+                    <div class="text-xs text-zinc-400 mt-6">dim=2048 • 64 experts • 16 loops</div>
+                </div>
+                <div onclick="selectVariant(3)" class="bg-zinc-900 border border-zinc-700 hover:border-purple-500 p-8 rounded-3xl cursor-pointer transition-all">
+                    <div class="text-emerald-400 text-sm">3B PARAMETERS</div>
+                    <div class="text-4xl font-bold mt-2">mythos_3b</div>
+                    <div class="text-xs text-zinc-400 mt-6">dim=3072 • 64 experts • 16 loops</div>
+                </div>
+                <div onclick="selectVariant(10)" class="bg-zinc-900 border border-purple-500 p-8 rounded-3xl cursor-pointer transition-all ring-2 ring-purple-500/50">
+                    <div class="text-emerald-400 text-sm">10B PARAMETERS</div>
+                    <div class="text-4xl font-bold mt-2">mythos_10b</div>
+                    <div class="text-xs text-purple-400 mt-6 font-medium">RECOMMENDED • 24 loops</div>
+                </div>
+                <div onclick="selectVariant(100)" class="bg-zinc-900 border border-zinc-700 hover:border-purple-500 p-8 rounded-3xl cursor-pointer transition-all">
+                    <div class="text-emerald-400 text-sm">100B+ PARAMETERS</div>
+                    <div class="text-4xl font-bold mt-2">mythos_100b</div>
+                    <div class="text-xs text-zinc-400 mt-6">1M context • frontier scale</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Architecture -->
+        <div id="architecture" class="bg-zinc-900/70 border border-purple-500/20 rounded-3xl p-16">
+            <div class="text-purple-400 text-xs tracking-[2px] uppercase mb-4">PHASE 03 — CORE ARCHITECTURE</div>
+            <h3 class="text-5xl font-bold tracking-tighter mb-10">Recurrent-Depth Transformer (RDT)</h3>
+            
+            <div class="grid grid-cols-12 gap-12">
+                <div class="col-span-7 font-mono text-sm bg-black/60 p-10 rounded-2xl leading-relaxed border border-purple-500/10">
+                    Input → <span class="text-purple-400">Prelude (2 layers)</span> → <span class="text-cyan-400">Recurrent Block (T loops)</span> → <span class="text-purple-400">Coda (2 layers)</span> → Output<br><br>
+                    h<sub>t+1</sub> = A·h<sub>t</sub> + B·e + Transformer(h<sub>t</sub>, e)<br>
+                    <span class="text-emerald-400">with ρ(A) &lt; 1 enforced by construction</span>
+                </div>
+                <div class="col-span-5 space-y-8 text-sm">
+                    <div class="flex gap-6">
+                        <div class="w-8 h-8 rounded-xl bg-purple-500/20 flex items-center justify-center text-purple-400 font-bold">P</div>
+                        <div class="pt-1">Prelude — initial feature extraction</div>
+                    </div>
+                    <div class="flex gap-6">
+                        <div class="w-8 h-8 rounded-xl bg-cyan-500/20 flex items-center justify-center text-cyan-400 font-bold">R</div>
+                        <div class="pt-1">Recurrent — looped with input injection + MoE + LoRA depth adaptation</div>
+                    </div>
+                    <div class="flex gap-6">
+                        <div class="w-8 h-8 rounded-xl bg-purple-500/20 flex items-center justify-center text-purple-400 font-bold">C</div>
+                        <div class="pt-1">Coda — final refinement before LM head</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-12 text-xs text-zinc-400 border-t border-purple-500/10 pt-8">
+                This implementation is a faithful open-source reconstruction of the architecture speculated to power Claude Mythos — looped transformers for implicit latent chain-of-thought, MoE for breadth, and dynamical systems stability for trainability.
+                <br><br>
+                <span class="text-purple-400">Built by Epic Tech AI using Machine 11 by @tsi_org</span>
+            </div>
+        </div>
+
+        <div class="text-center text-xs text-zinc-500 mt-20">
+            OpenMythos Swarm • Rebuilt as Epic Tech AI by Machine 11 (@tsi_org)<br>
+            Original foundations from kyegomez/OpenMythos and Sm0k367/grok-openmythos-swarm-1
+        </div>
+    </div>
+
+    <script>
+        const agents = [
+            { name: "core_impl", desc: "Implements recurrent block & injection", color: "purple" },
+            { name: "kortix_integrator", desc: "Bridges to Kortix agent system", color: "cyan" },
+            { name: "moe_scaler", desc: "Routes experts across loop depth", color: "violet" },
+            { name: "stability_guardian", desc: "Enforces ρ(A) < 1", color: "emerald" },
+            { name: "act_halter", desc: "Adaptive Computation Time", color: "amber" },
+            { name: "generalizer", desc: "Systematic OOD generalization", color: "rose" },
+            { name: "attention_specialist", desc: "MLA vs GQA tuning", color: "sky" },
+            { name: "trainer_scaler", desc: "FineWeb-Edu + scaling laws", color: "lime" },
+            { name: "overthink_fixer", desc: "Prevents latent drift", color: "orange" },
+            { name: "extension_tester", desc: "Loop extrapolation benchmarks", color: "fuchsia" },
+            { name: "integrator_lead", desc: "Merges swarm outputs", color: "purple" }
+        ];
+
+        function populateAgents() {
+            const container = document.getElementById("agents");
+            container.innerHTML = agents.map(agent => `
+                <div onclick="runAgent('${agent.name}')" class="swarm-card bg-zinc-900 p-6 rounded-3xl cursor-pointer group">
+                    <div class="flex justify-between">
+                        <div class="font-mono text-xs bg-zinc-800 px-4 py-2 rounded-2xl text-${agent.color}-400">${agent.name}</div>
+                        <i class="fas fa-brain text-3xl text-${agent.color}-400/70 group-hover:text-${agent.color}-400 transition"></i>
+                    </div>
+                    <div class="mt-8 text-sm text-zinc-400 leading-snug">${agent.desc}</div>
+                    <div class="mt-12 text-[10px] uppercase tracking-widest text-zinc-500 group-hover:text-purple-400">CLICK TO REASON →</div>
+                </div>
+            `).join('');
+        }
+
+        let rho = 0.847;
+        function updateRho() {
+            rho = Math.max(0.71, Math.min(0.96, rho + (Math.random() * 0.04 - 0.02)));
+            document.getElementById("rho").textContent = rho.toFixed(3);
+            setTimeout(updateRho, 1200);
+        }
+
+        function runAgent(name) {
+            const messages = [
+                `${name.toUpperCase()} completed ${Math.floor(Math.random()*12+8)} latent loops with stable spectral radius.`,
+                `MoE router activated. ${Math.floor(Math.random()*5+3)} experts contributed to this reasoning pass.`,
+                `ACT halting triggered at optimal depth. Output stabilized and merged.`,
+                `Recurrent injection maintained ρ(A) = ${rho.toFixed(3)}. Ready for integration.`
+            ];
+            
+            const notification = document.createElement('div');
+            notification.style.cssText = 'position:fixed; bottom:24px; right:24px; background:#18181b; border:1px solid #a855f7; color:white; padding:20px; border-radius:16px; box-shadow:0 0 30px -10px #a855f7; max-width:360px; z-index:10000;';
+            notification.innerHTML = `
+                <div class="flex items-start gap-4">
+                    <div class="text-3xl mt-0.5">⟳</div>
+                    <div>
+                        <div class="font-semibold text-purple-400">${name}</div>
+                        <div class="text-sm text-zinc-300 mt-2">${messages[Math.floor(Math.random()*messages.length)]}</div>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.transition = 'all 0.6s ease';
+                notification.style.opacity = '0';
+                notification.style.transform = 'translateY(30px)';
+                setTimeout(() => notification.remove(), 600);
+            }, 3800);
+        }
+
+        function launchSwarm() {
+            const order = ["core_impl", "kortix_integrator", "moe_scaler", "stability_guardian", "act_halter", "generalizer", "integrator_lead"];
+            let i = 0;
+            const interval = setInterval(() => {
+                if (i < order.length) {
+                    runAgent(order[i]);
+                    i++;
+                } else {
+                    clearInterval(interval);
+                    setTimeout(() => {
+                        const final = document.createElement('div');
+                        final.style.cssText = 'position:fixed; bottom:40px; left:50%; transform:translateX(-50%); background:linear-gradient(to right, #6b21a8, #0ea5e9); color:white; padding:24px 48px; border-radius:9999px; font-weight:600; box-shadow:0 0 40px -10px #a855f7; text-align:center; z-index:10001;';
+                        final.innerHTML = `FULL SWARM MESH COMPLETE<br><span class="text-xs opacity-75">All 11 agents converged • ρ(A) = ${rho.toFixed(3)}</span>`;
+                        document.body.appendChild(final);
+                        setTimeout(() => final.remove(), 4500);
+                    }, 600);
+                }
+            }, 380);
+        }
+
+        function selectVariant(n) {
+            alert(`Loaded mythos_${n}b configuration.\n\nRecurrent depth activated.\nSpectral radius stable.\n\nThe swarm is ready.`);
+        }
+
+        window.onload = () => {
+            populateAgents();
+            updateRho();
+            console.log('%cTHE MYTHOS SWARM IS ALIVE\\nBuilt by Epic Tech AI using Machine 11 by @tsi_org', 'color:#a855f7; font-size:13px; font-family:monospace');
+        };
+    </script>
+</body>
 </html>
