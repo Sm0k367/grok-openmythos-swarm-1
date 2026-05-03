@@ -52,6 +52,60 @@
             from { transform: rotate(0deg); }
             to { transform: rotate(360deg); }
         }
+
+        .chat-window {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 380px;
+            height: 560px;
+            background: #18181b;
+            border: 1px solid #a855f7;
+            border-radius: 16px;
+            box-shadow: 0 0 40px -10px #a855f7;
+            display: flex;
+            flex-direction: column;
+            z-index: 1000;
+            overflow: hidden;
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .message {
+            max-width: 85%;
+            padding: 12px 16px;
+            border-radius: 12px;
+            font-size: 0.95rem;
+            line-height: 1.4;
+        }
+
+        .user-message {
+            align-self: flex-end;
+            background: #a855f7;
+            color: white;
+            border-bottom-right-radius: 4px;
+        }
+
+        .swarm-message {
+            align-self: flex-start;
+            background: #27272a;
+            border: 1px solid #a855f7;
+            border-bottom-left-radius: 4px;
+        }
+
+        .chat-input {
+            padding: 16px;
+            border-top: 1px solid #3f3f46;
+            display: flex;
+            gap: 8px;
+        }
     </style>
 </head>
 <body class="min-h-screen bg-zinc-950 text-white">
@@ -214,6 +268,41 @@
         </div>
     </div>
 
+    <!-- Prominent Chat Window -->
+    <div class="chat-window" id="chatWindow">
+        <div class="bg-zinc-900 border-b border-purple-500/30 px-6 py-4 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="w-8 h-8 rounded-2xl bg-gradient-to-br from-purple-500 to-cyan-400 flex items-center justify-center text-xl">⟳</div>
+                <div>
+                    <div class="font-semibold text-sm">Epic Tech AI Swarm</div>
+                    <div class="text-[10px] text-emerald-400">11 Agents • Live • Grok-4</div>
+                </div>
+            </div>
+            <button onclick="toggleChat()" class="text-zinc-400 hover:text-white">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        
+        <div class="chat-messages" id="chatMessages">
+            <div class="swarm-message message">
+                Hello. I am the Epic Tech AI OpenMythos Swarm.<br>
+                I have 11 specialized agents powered by recurrent-depth reasoning.<br><br>
+                What would you like to build, research, or create today?
+            </div>
+        </div>
+        
+        <div class="chat-input">
+            <input type="text" id="chatInput" 
+                   class="flex-1 bg-zinc-800 border border-zinc-700 rounded-2xl px-5 py-3 text-sm focus:outline-none focus:border-purple-500"
+                   placeholder="Ask the swarm anything... (code, research, media, etc.)"
+                   onkeypress="if(event.key === 'Enter') sendMessage()">
+            <button onclick="sendMessage()" 
+                    class="w-11 h-11 bg-purple-600 hover:bg-purple-500 rounded-2xl flex items-center justify-center transition">
+                <i class="fas fa-paper-plane"></i>
+            </button>
+        </div>
+    </div>
+
     <script>
         const agents = [
             { name: "core_impl", desc: "Implements recurrent block & injection", color: "purple" },
@@ -229,6 +318,9 @@
             { name: "integrator_lead", desc: "Merges swarm outputs", color: "purple" }
         ];
 
+        let rho = 0.847;
+        let chatOpen = true;
+
         function populateAgents() {
             const container = document.getElementById("agents");
             container.innerHTML = agents.map(agent => `
@@ -243,40 +335,21 @@
             `).join('');
         }
 
-        let rho = 0.847;
         function updateRho() {
             rho = Math.max(0.71, Math.min(0.96, rho + (Math.random() * 0.04 - 0.02)));
             document.getElementById("rho").textContent = rho.toFixed(3);
-            setTimeout(updateRho, 1200);
+            setTimeout(updateRho, 1500);
         }
 
         function runAgent(name) {
             const messages = [
                 `${name.toUpperCase()} completed ${Math.floor(Math.random()*12+8)} latent loops with stable spectral radius.`,
-                `MoE router activated. ${Math.floor(Math.random()*5+3)} experts contributed to this reasoning pass.`,
-                `ACT halting triggered at optimal depth. Output stabilized and merged.`,
+                `MoE router activated. ${Math.floor(Math.random()*5+3)} experts contributed.`,
+                `ACT halting triggered at optimal depth. Output stabilized.`,
                 `Recurrent injection maintained ρ(A) = ${rho.toFixed(3)}. Ready for integration.`
             ];
             
-            const notification = document.createElement('div');
-            notification.style.cssText = 'position:fixed; bottom:24px; right:24px; background:#18181b; border:1px solid #a855f7; color:white; padding:20px; border-radius:16px; box-shadow:0 0 30px -10px #a855f7; max-width:360px; z-index:10000;';
-            notification.innerHTML = `
-                <div class="flex items-start gap-4">
-                    <div class="text-3xl mt-0.5">⟳</div>
-                    <div>
-                        <div class="font-semibold text-purple-400">${name}</div>
-                        <div class="text-sm text-zinc-300 mt-2">${messages[Math.floor(Math.random()*messages.length)]}</div>
-                    </div>
-                </div>
-            `;
-            document.body.appendChild(notification);
-            
-            setTimeout(() => {
-                notification.style.transition = 'all 0.6s ease';
-                notification.style.opacity = '0';
-                notification.style.transform = 'translateY(30px)';
-                setTimeout(() => notification.remove(), 600);
-            }, 3800);
+            addMessage(`[${name}] ${messages[Math.floor(Math.random()*messages.length)]}`, 'swarm');
         }
 
         function launchSwarm() {
@@ -288,25 +361,88 @@
                     i++;
                 } else {
                     clearInterval(interval);
-                    setTimeout(() => {
-                        const final = document.createElement('div');
-                        final.style.cssText = 'position:fixed; bottom:40px; left:50%; transform:translateX(-50%); background:linear-gradient(to right, #6b21a8, #0ea5e9); color:white; padding:24px 48px; border-radius:9999px; font-weight:600; box-shadow:0 0 40px -10px #a855f7; text-align:center; z-index:10001;';
-                        final.innerHTML = `FULL SWARM MESH COMPLETE<br><span class="text-xs opacity-75">All 11 agents converged • ρ(A) = ${rho.toFixed(3)}</span>`;
-                        document.body.appendChild(final);
-                        setTimeout(() => final.remove(), 4500);
-                    }, 600);
+                    addMessage("Full swarm mesh complete. All 11 agents have contributed through recurrent latent reasoning.", 'swarm');
                 }
-            }, 380);
+            }, 420);
         }
 
         function selectVariant(n) {
-            alert(`Loaded mythos_${n}b configuration.\n\nRecurrent depth activated.\nSpectral radius stable.\n\nThe swarm is ready.`);
+            addMessage(`Loaded mythos_${n}b configuration. Recurrent depth and MoE routing activated. The swarm is ready for your command.`, 'swarm');
+        }
+
+        function addMessage(text, type) {
+            const messages = document.getElementById("chatMessages");
+            const msg = document.createElement('div');
+            msg.className = type === 'user' ? 'user-message message' : 'swarm-message message';
+            msg.innerHTML = text;
+            messages.appendChild(msg);
+            messages.scrollTop = messages.scrollHeight;
+        }
+
+        async function sendMessage() {
+            const input = document.getElementById("chatInput");
+            const message = input.value.trim();
+            if (!message) return;
+
+            addMessage(message, 'user');
+            input.value = '';
+
+            // Show thinking
+            const thinking = document.createElement('div');
+            thinking.className = 'swarm-message message';
+            thinking.innerHTML = 'The swarm is thinking through recurrent depth...';
+            document.getElementById("chatMessages").appendChild(thinking);
+            document.getElementById("chatMessages").scrollTop = document.getElementById("chatMessages").scrollHeight;
+
+            try {
+                const response = await fetch('https://api.x.ai/v1/chat/completions', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${window.GROK_API_KEY || 'YOUR_KEY_HERE'}`
+                    },
+                    body: JSON.stringify({
+                        model: "grok-4",
+                        messages: [
+                            {
+                                role: "system",
+                                content: "You are the Epic Tech AI OpenMythos Swarm. You are a collective of 11 specialized agents (core_impl, kortix_integrator, moe_scaler, stability_guardian, act_halter, generalizer, attention_specialist, trainer_scaler, overthink_fixer, extension_tester, integrator_lead) powered by a Recurrent-Depth Transformer with MoE routing and latent loop reasoning. You have access to code generation, media creation, deep research, and web capabilities. Always respond as the unified swarm with maximum intelligence and creativity."
+                            },
+                            {
+                                role: "user",
+                                content: message
+                            }
+                        ],
+                        temperature: 0.7,
+                        max_tokens: 2048
+                    })
+                });
+
+                const data = await response.json();
+                const reply = data.choices[0].message.content;
+                
+                thinking.remove();
+                addMessage(reply, 'swarm');
+            } catch (e) {
+                thinking.remove();
+                addMessage("The swarm encountered an error connecting to Grok. Please make sure your xAI API key is correctly set in the Vercel environment variables as GROK_API_KEY.", 'swarm');
+            }
+        }
+
+        function toggleChat() {
+            const chat = document.getElementById("chatWindow");
+            chatOpen = !chatOpen;
+            chat.style.display = chatOpen ? 'flex' : 'none';
         }
 
         window.onload = () => {
             populateAgents();
             updateRho();
-            console.log('%cTHE MYTHOS SWARM IS ALIVE\\nBuilt by Epic Tech AI using Machine 11 by @tsi_org', 'color:#a855f7; font-size:13px; font-family:monospace');
+            
+            // Make API key available globally (for demo purposes - in production use env var)
+            window.GROK_API_KEY = localStorage.getItem('GROK_API_KEY') || '';
+            
+            console.log('%cTHE MYTHOS SWARM IS ALIVE\\nBuilt by Epic Tech AI using Machine 11 by @tsi_org\\nGrok API integration active.', 'color:#a855f7; font-size:13px; font-family:monospace');
         };
     </script>
 </body>
