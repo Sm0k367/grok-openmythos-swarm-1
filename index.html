@@ -399,7 +399,7 @@
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${window.GROK_API_KEY || 'YOUR_KEY_HERE'}`
+                        'Authorization': `Bearer ${import.meta.env.VITE_GROK_API_KEY || ""}`
                     },
                     body: JSON.stringify({
                         model: "grok-4",
@@ -425,7 +425,7 @@
                 addMessage(reply, 'swarm');
             } catch (e) {
                 thinking.remove();
-                addMessage("The swarm encountered an error connecting to Grok. Please make sure your xAI API key is correctly set in the Vercel environment variables as GROK_API_KEY.", 'swarm');
+                addMessage("The swarm encountered an error connecting to Grok. Please make sure your xAI API key is set in Vercel as VITE_GROK_API_KEY (it must start with VITE_ to be available in the frontend).", 'swarm');
             }
         }
 
@@ -440,7 +440,8 @@
             updateRho();
             
             // Make API key available globally (for demo purposes - in production use env var)
-            window.GROK_API_KEY = localStorage.getItem('GROK_API_KEY') || '';
+            // Use VITE_GROK_API_KEY for Vercel frontend exposure
+            console.log('Grok API Key configured:', !!import.meta.env.VITE_GROK_API_KEY);
             
             console.log('%cTHE MYTHOS SWARM IS ALIVE\\nBuilt by Epic Tech AI using Machine 11 by @tsi_org\\nGrok API integration active.', 'color:#a855f7; font-size:13px; font-family:monospace');
         };
